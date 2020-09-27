@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="origin" />
+    <meta property="og:description" content="一，概述 Flutter中拥有30多种预定义的布局widget，常用的有Container、Padding、Center、Flex、Row、Colum、ListView、GridView。按照《Flu" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>【Flutter学习】页面布局之基础布局组件</title>
+    <link id="favicon" rel="shortcut icon" href="//common.cnblogs.com/favicon.ico?v=20200522" type="image/x-icon" />
+    
+    <link rel="stylesheet" href="/css/blog-common.min.css?v=7Pwqzj5EBy4dBv4DJNI181rFKP8_OF0hT7jO3o8jAa0" />
+    <link id="MainCss" rel="stylesheet" href="/skins/simpleclear/bundle-simpleclear.min.css?v=VK2UnJ8cJRhid2HBuGo4mQJdQ6E3Xlp7fD_jRXm5PUU" />
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="/skins/simpleclear/bundle-simpleclear-mobile.min.css?v=BwwZ7MLfnBB_gg_jg5l8wV5ShcEWmGGXCRbOC0DHsBk" />
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/lxlx1798/rss" />
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/lxlx1798/rsd.xml" />
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/lxlx1798/wlwmanifest.xml" />
+    <script>
+        var currentBlogId = 335972;
+        var currentBlogApp = 'lxlx1798';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'SimpleClear';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2019-06-26 02:24';
+        </script>
+    <script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+    <script src="/js/blog-common.min.js?v=ZMP-E7oivIbnbdC4Ap-FXPEUrs-k9WrJgvJkU43qwDI"></script>
+    
+    
+    
+</head>
+<body>
+    <a name="top"></a>
+    
+    <div id="main">
+    <div id="header">
+        
+
+<p id="tagline">
+
+</p>
+
+
+    </div>
+    <div id="post_detail">
+<div class="post">
+    <h2 class="postTitle">
+<center>【Flutter学习】页面布局之基础布局组件</center>
+
+    
+</h2>
+    <div class="postText">
+<div id="cnblogs_post_body" class="blogpost-body">
+    <h3>一，概述<code>　　</code></h3>
+<p><code>　　<strong>Flutter</strong></code>中拥有30多种预定义的布局<code>widget</code>，常用的有<strong><code>Container</code></strong>、<strong><code>Padding</code></strong>、<strong><code>Center</code></strong>、<strong><code>Flex</code></strong>、<strong><code>Row</code></strong>、<strong><code>Colum</code></strong>、<strong><code>ListView</code></strong>、<strong><code>GridView</code></strong>。按照《<strong>Flutter技术入门与实战</strong>》上面来说的话，大概分为四类</p>
+<ul>
+<li><strong>基础布局组件</strong>：<strong>Container</strong>(容器布局)，<strong>Center</strong>(居中布局)，<strong>Padding</strong>(填充布局)，<strong>Align</strong>(对齐布局)，<strong>Colum</strong>（垂直布局），<strong>Row</strong>（水平布局），<strong>Expanded</strong>（配合Colum，Row使用），<strong>FittedBox</strong>（缩放布局），<strong>Stack</strong>（堆叠布局），<strong>overflowBox</strong>(溢出父视图容器)。</li>
+<li><strong>宽高尺寸处理</strong>：<strong>SizedBox</strong>（设置具体尺寸），<strong>ConstrainedBox</strong>（限定最大最小宽高布局），<strong>LimitedBox</strong>（限定最大宽高布局），<strong>AspectRatio</strong>（调整宽高比），<strong>FractionallySizedBox</strong>（百分比布局）</li>
+<li><strong>列表和表格处理</strong>：<strong>ListView</strong>（列表），<strong>GridView</strong>（网格），<strong>Table</strong>（表格）</li>
+<li><strong>其它布局处理</strong>：Transform（矩阵转换），Baseline（基准线布局），Offstage（控制是否显示组件），Wrap（按宽高自动换行布局）</li>
+</ul>
+<h3>二，基础布局处理组件</h3>
+<ul>
+<li><strong>Container</strong>
+<ul>
+<li>介绍：<br />一个拥有绘制、定位、调整大小的<code>widget</code>，示意图如下：<br />　　<img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190625183003806-1537561878.png" alt="" /></li>
+<li>组成<br />
+<p>Container的组成如下：</p>
+<ul>
+<li>最里层的是child元素；</li>
+<li>child元素首先会被padding包着；</li>
+<li>然后添加额外的constraints限制；</li>
+<li>最后添加margin。</li>
+</ul>
+<p>Container的绘制的过程如下：</p>
+<ul>
+<li>首先会绘制transform效果；</li>
+<li>接着绘制decoration；</li>
+<li>然后绘制child；</li>
+<li>最后绘制foregroundDecoration。</li>
+</ul>
+<p>Container自身尺寸的调节分两种情况：</p>
+<ul>
+<li>Container在没有子节点（children）的时候，会试图去变得足够大。除非constraints是unbounded限制，在这种情况下，Container会试图去变得足够小。</li>
+<li>带子节点的Container，会根据子节点尺寸调节自身尺寸，但是Container构造器中如果包含了width、height以及constraints，则会按照构造器中的参数来进行尺寸的调节。</li>
+</ul>
+</li>
+<li>布局行为<br />
+<p>由于Container组合了一系列的widget，这些widget都有自己的布局行为，因此Container的布局行为有时候是比较复杂的。</p>
+<p>一般情况下，Container会遵循如下顺序去尝试布局：</p>
+<ul>
+<li>对齐（alignment）；</li>
+<li>调节自身尺寸适合子节点；</li>
+<li>采用width、height以及constraints布局；</li>
+<li>扩展自身去适应父节点；</li>
+<li>调节自身到足够小。</li>
+</ul>
+<p>进一步说：</p>
+<ul>
+<li>如果没有子节点、没有设置width、height以及constraints，并且父节点没有设置unbounded的限制，Container会将自身调整到足够小。</li>
+<li>如果没有子节点、对齐方式（alignment），但是提供了width、height或者constraints，那么Container会根据自身以及父节点的限制，将自身调节到足够小。</li>
+<li>如果没有子节点、width、height、constraints以及alignment，但是父节点提供了bounded限制，那么Container会按照父节点的限制，将自身调整到足够大。</li>
+<li>如果有alignment，父节点提供了unbounded限制，那么Container将会调节自身尺寸来包住child；</li>
+<li>如果有alignment，并且父节点提供了bounded限制，那么Container会将自身调整的足够大（在父节点的范围内），然后将child根据alignment调整位置；</li>
+<li>含有child，但是没有width、height、constraints以及alignment，Container会将父节点的constraints传递给child，并且根据child调整自身。</li>
+</ul>
+<p>另外，margin以及padding属性也会影响到布局。</p>
+</li>
+<li>继承关系<br />
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; StatelessWidget &gt; Container</pre>
+</div>
+<p>从继承关系可以看出，Container是一个StatelessWidget。Container并不是一个最基础的widget，它是由一系列的基础widget组合而成。</p>
+</li>
+<li>构造方法<br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Container({
+    Key key,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.alignment,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.padding, //设置内边距
+    Color color, //用来设置container背景色，如果foregroundDecoration设置的话，可能会遮盖color效果。container背景色和decoration不能同时设置，
+    Decoration decoration, //边框、圆角、阴影、形状、渐变、背景图像
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.foregroundDecoration, //decoration是背景，foregroundDecoration是前景。设置了foregroundDecoration可能会遮盖child内容，一般半透明遮盖（蒙层）效果使用！
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> width,
+    </span><span style="color: #0000ff;">double</span><span style="color: #000000;"> height,
+    BoxConstraints constraints,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.margin, //设置外边距，container与父边框的距离
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.transform,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.child, //孩子
+  }) : assert(margin </span>== <span style="color: #0000ff;">null</span> ||<span style="color: #000000;"> margin.isNonNegative),
+       assert(padding </span>== <span style="color: #0000ff;">null</span> ||<span style="color: #000000;"> padding.isNonNegative),
+       assert(decoration </span>== <span style="color: #0000ff;">null</span> ||<span style="color: #000000;"> decoration.debugAssertIsValid()),
+       assert(constraints </span>== <span style="color: #0000ff;">null</span> ||<span style="color: #000000;"> constraints.debugAssertIsValid()),
+       assert(color </span>== <span style="color: #0000ff;">null</span> || decoration == <span style="color: #0000ff;">null</span><span style="color: #000000;">,
+         </span><span style="color: #800000;">'</span><span style="color: #800000;">Cannot provide both a color and a decoration\n</span><span style="color: #800000;">'</span>
+         <span style="color: #800000;">'</span><span style="color: #800000;">The color argument is just a shorthand for "decoration: new BoxDecoration(color: color)".</span><span style="color: #800000;">'</span><span style="color: #000000;">
+       )</span></pre>
+</div>
+</li>
+<li>参数解析<br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">key：Container唯一标识符，用于查找更新。
+alignment：控制child的对齐方式，如果container或者container父节点尺寸大于child的尺寸，这个属性设置会起作用，有很多种对齐方式。
+padding：decoration内部的空白区域，如果有child的话，child位于padding内部。padding与margin的不同之处在于，padding是包含在content内，而margin则是外部边界，设置点击事件的话，padding区域会响应，而margin区域不会响应。
+color：用来设置container背景色，如果foregroundDecoration设置的话，可能会遮盖color效果。
+decoration：绘制在child后面的装饰，设置了decoration的话，就不能设置color属性，否则会报错，此时应该在decoration中进行颜色的设置。decoration可以设置边框、背景色、背景图片、圆角等属性，非常实用。
+foregroundDecoration：绘制在child前面的装饰。
+width：container的宽度，设置为double.infinity可以强制在宽度上撑满，不设置，则根据child和父节点两者一起布局。
+height：container的高度，设置为double.infinity可以强制在高度上撑满。
+constraints：添加到child上额外的约束条件。
+margin：围绕在decoration和child之外的空白区域，不属于内容区域。
+transform：设置container的变换矩阵，类型为Matrix4。 对于transform这个属性，一般有过其他平台开发经验的，都大致了解，这种变换，一般不是变换的实际位置，而是变换的绘制效果，也就是说它的点击以及尺寸、间距等都是按照未变换前的。
+child：container中的内容widget。</span></pre>
+</div>
+</li>
+</ul>
+</li>
+<li><strong>Center</strong><br />
+<ul>
+<li><strong>介绍</strong>：将其子widget居中显示在自身内部的widget。只能有一个chlid，但是可以用container包含好多子child，继承自Align。<br />用于将其子项与其自身对齐，并根据子级的大小自行调整大小。示意图：<br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190625184840110-1526510445.png" alt="" /><br /><br /><br /></li>
+<li><strong>构造函数</strong>：<br />
+<div class="cnblogs_code">
+<pre>Center({ <br />　　Key key, <br /><span style="color: #0000ff;">   double</span> widthFactor, //宽度因子<br /><span style="color: #0000ff;">   double</span><span style="color: #000000;"> heightFactor, //高度因子<br />   Widget child //<br />　}): super(key: key, widthFactor: widthFactor, heightFactor: heightFactor, child: child);</span></pre>
+</div>
+</li>
+<li><strong>参数解析</strong>：
+<div class="cnblogs_code">
+<pre>widthFactor：宽度因子<br />heightFactor：高度因子<br />child：子节点/孩子/子组件</pre>
+</div>
+<pre>（1）如果它的尺寸受到约束且[widthFactor]和[heightFactor]为空，则此窗口小部件将尽可能大。 <br />（2）如果维度不受约束且相应的大小因子为null，则窗口小部件将匹配其在该维度中的子项大小（其实就是子view的宽高就是center容器的宽高）。 <br />（3）如果尺寸因子为非null，则此center容器的相应尺寸将是子view的尺寸和尺寸因子的乘积。 <br />　　 例如，如果widthFactor是2.0，那么此小部件的宽度将始终是其子宽度的两倍，并且将子view居中，来看看下图吧。</pre>
+</li>
+</ul>
+</li>
+<li><strong>Padding</strong><br />
+<ul>
+<li><strong>介绍</strong>：
+<p>Padding在Flutter中用的也挺多的，作为一个基础的控件，功能非常单一，给子节点设置padding属性。写过其他端的都了解这个属性，就是设置内边距属性，内边距的空白区域，也是widget的一部分。</p>
+<p>Flutter中并没有单独的Margin控件，在Container中有margin属性，看源码关于margin的实现。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (margin != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+  current </span>= <span style="color: #0000ff;">new</span> Padding(padding: margin, child: current);</pre>
+</div>
+<p>不难看出，Flutter中淡化了margin以及padding的区别，margin实质上也是由Padding实现的。</p>
+示意图如下：<br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190625190153250-1842954349.png" alt="" /></li>
+<li><strong><strong>布局行为<br /></strong></strong>
+<p>Padding的布局分为两种情况：</p>
+<ul>
+<li>当child为空的时候，会产生一个宽为left+right，高为top+bottom的区域；</li>
+<li>当child不为空的时候，Padding会将布局约束传递给child，根据设置的padding属性，缩小child的布局尺寸。然后Padding将自己调整到child设置了padding属性的尺寸，在child周围创建空白区域。</li>
+</ul>
+</li>
+<li><strong><strong>继承关系<br /></strong></strong>
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; SingleChildRenderObjectWidget &gt; Padding</pre>
+</div>
+<p>从继承关系可以看出，Padding控件是一个基础控件，不像Container这种组合控件。Container中的margin以及padding属性都是利用Padding控件去实现的。</p>
+<ul>
+<li>
+<h4>关于SingleChildRenderObjectWidget</h4>
+<div class="cnblogs_code">
+<pre>SingleChildRenderObjectWidget是RenderObjectWidgets的一个子类，用于限制只能有一个子节点。它只提供child的存储，而不提供实际的更新逻辑。</pre>
+</div>
+<h4><a id="user-content-132-关于renderobjectwidgets" class="anchor" href="https://github.com/yang7229693/flutter-study/blob/master/post/5.%20Flutter%20%E5%B8%83%E5%B1%80%EF%BC%88%E4%BA%8C%EF%BC%89-%20Padding%E3%80%81Align%E3%80%81Center%E8%AF%A6%E8%A7%A3.md#132-%E5%85%B3%E4%BA%8Erenderobjectwidgets"></a></h4>
+</li>
+<li>
+<h4><a id="user-content-132-关于renderobjectwidgets" class="anchor" href="https://github.com/yang7229693/flutter-study/blob/master/post/5.%20Flutter%20%E5%B8%83%E5%B1%80%EF%BC%88%E4%BA%8C%EF%BC%89-%20Padding%E3%80%81Align%E3%80%81Center%E8%AF%A6%E8%A7%A3.md#132-%E5%85%B3%E4%BA%8Erenderobjectwidgets"></a>关于RenderObjectWidgets</h4>
+<div class="cnblogs_code">
+<pre>RenderObjectWidgets为RenderObjectElement提供配置，而RenderObjectElement包含着（wrap）RenderObject，RenderObject则是在应用中提供实际的绘制（rendering）的元素。</pre>
+</div>
+</li>
+</ul>
+</li>
+<li><strong>构造函数</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Padding({
+    Key key,
+    @required </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.padding, //内边距
+    Widget child,
+  }) : assert(padding </span>!= <span style="color: #0000ff;">null</span><span style="color: #000000;">),
+       super(key: key, child: child);</span></pre>
+</div>
+</li>
+<li><strong>参数含义</strong>　　<br />
+<div class="cnblogs_code">
+<pre>padding： 类型为EdgeInsetsGeometry  填充值可以使用EdgeInsets方法，例如：edgeInsets.all(<span style="color: #800080;">6.0</span>)将容器上下左右填充设置为6.<span style="color: #800080;">0</span>，也可以用EdgeInsets.only方法单独设置某一边的间距</pre>
+</div>
+</li>
+</ul>
+</li>
+<li><strong>Align</strong><br />
+<ul>
+<li><strong>介绍</strong>：在其他端的开发，Align一般都是当做一个控件的属性，并没有拿出来当做一个单独的控件。Align本身实现的功能并不复杂，设置child的对齐方式，例如居中、居左居右等，并根据child尺寸调节自身尺寸。<br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190625192307527-708027178.png" alt="" /><br />
+<p>Align的布局行为分为两种情况：</p>
+<ul>
+<li>
+<p>当<strong>widthFactor</strong>和<strong>heightFactor</strong>为null的时候，当其有限制条件的时候，Align会根据限制条件尽量的扩展自己的尺寸，当没有限制条件的时候，会调整到child的尺寸；</p>
+
+
+
+
+</li>
+<li>
+<p>当<strong>widthFactor</strong>或者<strong>heightFactor</strong>不为null的时候，Aligin会根据factor属性，扩展自己的尺寸，例如设置widthFactor为2.0的时候，那么，Align的宽度将会是child的两倍。</p>
+<p>&nbsp;</p>
+
+
+
+
+</li>
+<li>
+<p>Align为什么会有这样的布局行为呢？<br />原因很简单，设置对齐方式的话，如果外层元素尺寸不确定的话，内部的对齐就无法确定。因此，会有宽高因子、根据外层限制扩大到最大尺寸、外层不确定时调整到child尺寸这些行为。</p>
+
+
+
+
+</li>
+<li>
+<div>Center继承自Align，只不过是将alignment设置为Alignment.center，其他属性例如widthFactor、heightFactor，布局行为，都与Align完全一样，在这里就不再单独做介绍了。Center源码如下，没有设置alignment属性，是因为Align默认的对齐方式就是居中。</div>
+
+
+
+
+</li>
+
+
+
+
+</ul>
+
+
+
+
+</li>
+<li><strong>构造函数</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">const</span><span style="color: #000000;"> Align({
+    Key key,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.alignment: Alignment.center,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.widthFactor, //宽度因子
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.heightFactor, //高度因子
+    Widget child
+  })</span></pre>
+</div>
+</li>
+<li><strong>参数的含义</strong>
+<ul>
+<li>
+<p><strong>alignment</strong>：对齐方式，一般会使用系统默认提供的9种方式，但是并不是说只有这9种，例如如下的定义。系统提供的9种方式只是预先定义好的。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #808080;">///</span><span style="color: #008000;"> The top left corner.</span>
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">const</span> Alignment topLeft = <span style="color: #0000ff;">const</span> Alignment(-<span style="color: #800080;">1.0</span>, -<span style="color: #800080;">1.0</span>);</pre>
+</div>
+<p>Alignment实际上是包含了两个属性的，其中第一个参数，-1.0是左边对齐，1.0是右边对齐，第二个参数，-1.0是顶部对齐，1.0是底部对齐。根据这个规则，我们也可以自定义我们需要的对齐方式，例如</p>
+<div class="cnblogs_code">
+<pre><span style="color: #808080;">///</span><span style="color: #008000;"> 居右高于底部1/4处.</span>
+<span style="color: #0000ff;">static</span> <span style="color: #0000ff;">const</span> Alignment rightHalfBottom = alignment: <span style="color: #0000ff;">const</span> Alignment(<span style="color: #800080;">1.0</span>, <span style="color: #800080;">0.5</span>),</pre>
+</div>
+<p>&nbsp;</p>
+</li>
+<li>
+<p><strong>widthFactor</strong>：宽度因子，如果设置的话，Align的宽度就是child的宽度乘以这个值，不能为负数。</p>
+</li>
+<li>
+<p><strong>heightFactor</strong>：高度因子，如果设置的话，Align的高度就是child的高度乘以这个值，不能为负数。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Colum</strong><br />
+<ul>
+<li><strong>介绍</strong>：<br />Row和Column都是Flex的子类，只是direction参数不同。Column各方面同Row，可参考下面的Row<br /><br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626102912336-1001686173.png" alt="" /></li>
+<li><strong>构造函数</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Column({
+    Key key,
+    MainAxisAlignment mainAxisAlignment </span>=<span style="color: #000000;"> MainAxisAlignment.start,
+    MainAxisSize mainAxisSize </span>=<span style="color: #000000;"> MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment </span>=<span style="color: #000000;"> CrossAxisAlignment.center,
+    TextDirection textDirection,
+    VerticalDirection verticalDirection </span>=<span style="color: #000000;"> VerticalDirection.down,
+    TextBaseline textBaseline,
+    List</span>&lt;Widget&gt; children = <span style="color: #0000ff;">const</span> &lt;Widget&gt;<span style="color: #000000;">[],
+  }) : super(
+    children: children,
+    key: key,
+    direction: Axis.vertical,
+    mainAxisAlignment: mainAxisAlignment,
+    mainAxisSize: mainAxisSize,
+    crossAxisAlignment: crossAxisAlignment,
+    textDirection: textDirection,
+    verticalDirection: verticalDirection,
+    textBaseline: textBaseline,
+  );</span></pre>
+</div>
+</li>
+<li><strong>参数的含义</strong><br />
+<div>
+<div>（1）<strong>MainAxisSize</strong>：　　控制自己的布局方式</div>
+
+
+
+</div>
+<div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">MainAxisSize.min　　默认值，Column和Row自适应children；
+MainAxisSize.max　　Column填充父控件竖屏，Row填充父控件横屏；需要搭配MainAxisAlignment使用才有效果；</span></pre>
+</div>
+</div>
+<div>
+<div>（2）<strong>MainAxisAlignment</strong>：　　控制子集的对齐方式，Column上下对齐，Row左右对齐</div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">MainAxisAlignment.start　　默认值，Column靠上，Row靠左；
+MainAxisAlignment.center　　Column,Row居中；
+MainAxisAlignment.end　　Column靠下，Row靠右；
+MainAxisAlignment.spaceAround　　自己填充，等份分配空间给子集，子集各自居中对齐；
+MainAxisAlignment.spaceBetween　　自己填充，等份分配空间给子集，子集两侧对齐；
+MainAxisAlignment.spaceEvenly　　自己填充，等份分配空间给子集，子集同一中线居中对齐；</span></pre>
+</div>
+</div>
+</div>
+<div>&nbsp; &nbsp; &nbsp; &nbsp; 注：当设置MainAxisSize.max时才该值有效果。</div>
+<div>&nbsp;</div>
+<div>
+<div>（3）<strong>CrossAxisAlignment</strong>：　　　控制子集<strong>各自</strong>的对齐方式，Column左右对齐，Row上下对齐<br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">CrossAxisAlignment.strech       　Column中会使子控件宽度调到最大，Row则使子控件高度调到最大
+CrossAxisAlignment.start　　　   Column中会使子控件向左对齐，Row中会使子控件向上对齐
+CrossAxisAlignment.center　　　默认值，子控件居中
+CrossAxisAlignment.end　　　　Column中会使子控件向右对齐，Row中会使子控件向下对齐
+CrossAxisAlignment.baseline　　按文本水平线对齐。与TextBaseline搭配使用</span></pre>
+</div>
+</div>
+<div>（4）<strong>TextBaseline</strong>：</div>
+<div>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">TextBaseline.alphabetic　　  用于对齐字母字符底部的水平线。
+TextBaseline.ideographic　　用于对齐表意字符的水平线。</span></pre>
+</div>
+</div>
+<div>
+<div>（5）<strong>VerticalDirection</strong>：　　控制子控件对齐方式是否相反方式<br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">VerticalDirection.down　　默认值，按照默认方式
+VerticalDirection.up　　　CrossAxisAlignment.start跟CrossAxisAlignment.end对反</span></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li><strong>Row</strong><br />
+<ul>
+<ul>
+<li><strong>介绍</strong>：<br />在Flutter中非常常见的一个多子节点控件，将children排列成一行。估计是借鉴了Web中Flex布局，所以很多属性和表现，都跟其相似。但是注意一点，自身不带滚动属性，如果超出了一行，在debug下面则会显示溢出的提示。<br /><br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626102715267-724470302.png" alt="" /></li>
+<li><strong>布局行为</strong>：Row的布局有六个步骤，这种布局表现来自Flex（Row和Column的父类）：</li>
+<ol>
+<li>首先按照不受限制的主轴（main axis）约束条件，对flex为null或者为0的child进行布局，然后按照交叉轴（ cross axis）的约束，对child进行调整；</li>
+<li>按照不为空的flex值，将主轴方向上剩余的空间分成相应的几等分；</li>
+<li>对上述步骤flex值不为空的child，在交叉轴方向进行调整，在主轴方向使用最大约束条件，让其占满步骤2所分得的空间；</li>
+<li>Flex交叉轴的范围取自子节点的最大交叉轴；</li>
+<li>主轴Flex的值是由mainAxisSize属性决定的，其中MainAxisSize可以取max、min以及具体的value值；</li>
+<li>每一个child的位置是由mainAxisAlignment以及crossAxisAlignment所决定。</li>
+
+
+
+</ol></ul>
+
+
+
+</ul>
+<p>&nbsp; &nbsp; &nbsp; Row的布局行为表面上看有这么多个步骤，其实也还算是简单，可以完全参照web中的Flex布局，包括主轴、交叉轴等概念。</p>
+<ul>
+<ul>　　</ul>
+
+
+
+</ul>
+
+
+
+<img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626101426317-771467322.png" alt="" />
+<ul>
+<li><strong>继承关系</strong><br />
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; MultiChildRenderObjectWidget &gt; Flex &gt; Row</pre>
+</div>
+<p>Row以及Column都是Flex的子类，它们的具体实现也都是由Flex完成，只是参数不同。</p>
+</li>
+<li><strong>构造函数</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Row({
+  Key key,
+  MainAxisAlignment mainAxisAlignment </span>=<span style="color: #000000;"> MainAxisAlignment.start,
+  MainAxisSize mainAxisSize </span>=<span style="color: #000000;"> MainAxisSize.max,
+  CrossAxisAlignment crossAxisAlignment </span>=<span style="color: #000000;"> CrossAxisAlignment.center,
+  TextDirection textDirection,
+  VerticalDirection verticalDirection </span>=<span style="color: #000000;"> VerticalDirection.down,
+  TextBaseline textBaseline,
+  List</span>&lt;Widget&gt; children = <span style="color: #0000ff;">const</span> &lt;Widget&gt;<span style="color: #000000;">[],
+})</span></pre>
+</div>
+</li>
+<li><strong>参数的含义</strong><br />
+<p><strong>MainAxisAlignment</strong>：主轴方向上的对齐方式，会对child的位置起作用，默认是<strong>start</strong>。</p>
+<p>其中MainAxisAlignment枚举值：</p>
+<ul>
+<li>center：将children放置在主轴的中心；</li>
+<li>end：将children放置在主轴的末尾；</li>
+<li>spaceAround：将主轴方向上的空白区域均分，使得children之间的空白区域相等，但是首尾child的空白区域为1/2；</li>
+<li>spaceBetween：将主轴方向上的空白区域均分，使得children之间的空白区域相等，首尾child都靠近首尾，没有间隙；</li>
+<li>spaceEvenly：将主轴方向上的空白区域均分，使得children之间的空白区域相等，包括首尾child；</li>
+<li>start：将children放置在主轴的起点；</li>
+
+
+
+</ul>
+<p>其中spaceAround、spaceBetween以及spaceEvenly的区别，就是对待首尾child的方式。其距离首尾的距离分别是空白区域的1/2、0、1。</p>
+<p><strong>MainAxisSize</strong>：在主轴方向占有空间的值，默认是max。</p>
+<p><strong>MainAxisSize</strong>的取值有两种：</p>
+<ul>
+<li>max：根据传入的布局约束条件，最大化主轴方向的可用空间；</li>
+<li>min：与max相反，是最小化主轴方向的可用空间；</li>
+
+
+
+</ul>
+<p><strong>CrossAxisAlignment：</strong>children在交叉轴方向的对齐方式，与MainAxisAlignment略有不同。</p>
+<p><strong>CrossAxisAlignment</strong>枚举值有如下几种：</p>
+<ul>
+<li>baseline：在交叉轴方向，使得children的baseline对齐；</li>
+<li>center：children在交叉轴上居中展示；</li>
+<li>end：children在交叉轴上末尾展示；</li>
+<li>start：children在交叉轴上起点处展示；</li>
+<li>stretch：让children填满交叉轴方向；</li>
+
+
+
+</ul>
+<p><strong>TextDirection</strong>：阿拉伯语系的兼容设置，一般无需处理。</p>
+<p><strong>VerticalDirection</strong>：定义了children摆放顺序，默认是down。</p>
+<p><strong>VerticalDirection</strong>枚举值有两种：</p>
+<ul>
+<li><strong>down</strong>：从top到bottom进行布局；</li>
+<li><strong>up</strong>：从bottom到top进行布局。</li>
+
+
+
+</ul>
+<p>top对应Row以及Column的话，就是左边和顶部，bottom的话，则是右边和底部。</p>
+<p><strong>TextBaseline</strong>：使用的TextBaseline的方式，有两种，前面已经介绍过。</p>
+
+
+
+</li>
+<li></li>
+
+
+
+
+</ul>
+
+
+
+
+</li>
+<li><strong>Expanded</strong><br />
+<ul>
+<li><strong>介绍</strong>：
+<div>
+<div><code>Expanded</code>组件可以使<code>Row</code>、<code>Column</code>、<code>Fiex</code>等子组件在其主轴上方向展开并填充可用的空间，这里注意：<code>Expanded</code>组件必须用在<code>Row</code>、<code>Column</code>、<code>Fiex</code>内，并且从<code>Expanded</code>到封装它的<code>Row</code>、<code>Column</code>、<code>Flex</code>的路径必须只包括<code>StatelessWidgets</code>或者<code>StatefulWidgets</code>(不能是其他类型的组件，像<code>RenderObjectWidget</code>，它是渲染对象，不再改变尺寸，因此<code>Expanded</code>不能放进<code>RenderObjectWidget</code>)，示意图如下：</div>
+
+
+
+<img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626105628407-127759332.png" alt="" />
+<div id="main">
+<div id="post_detail">
+<div class="post">
+<div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown">
+<p><strong>注意一点</strong>：在Row中使用Expanded的时候，无法指定Expanded中的子组件的宽度width，但可以指定其高度height。同理，在Column中使用Expanded的时候，无法指定Expanded中的子组件的高度height，可以指定宽度width。</p>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</li>
+<li>构造函数<br />
+<div class="cnblogs_code">
+<pre> <span style="color: #0000ff;">const</span><span style="color: #000000;"> Expanded({
+    Key key,
+    </span><span style="color: #0000ff;">int</span> flex = <span style="color: #800080;">1</span><span style="color: #000000;">,
+    @required Widget child,
+  }) : super(key: key, flex: flex, fit: FlexFit.tight, child: child);</span></pre>
+</div>
+</li>
+</ul>
+</li>
+<li><strong>FittedBox</strong><br />
+<ul>
+<li>介绍：<br />
+<p>按照其官方的介绍，它主要做了两件事情，缩放（Scale）以及位置调整（Position）。</p>
+<p>FittedBox会在自己的尺寸范围内缩放并且调整child位置，使得child适合其尺寸。做过移动端的，可能会联想到ImageView控件，它是将图片在其范围内，按照规则，进行缩放位置调整。FittedBox跟ImageView是有些类似的，可以猜测出，它肯定有一个类似于ScaleType的属性。</p>
+
+
+
+</li>
+<li>布局行为：<br />
+<p>FittedBox的布局行为还算简单，官方没有给出说明，我在这里简单说一下。由于FittedBox是一个容器，需要让其child在其范围内缩放，因此其布局行为分两种情况：</p>
+<ul>
+<li>如果外部有约束的话，按照外部约束调整自身尺寸，然后缩放调整child，按照指定的条件进行布局；</li>
+<li>如果没有外部约束条件，则跟child尺寸一致，指定的缩放以及位置属性将不起作用。</li>
+
+
+
+</ul>
+
+
+
+</li>
+<li>继承关系<br />
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; SingleChildRenderObjectWidget &gt; FittedBox</pre>
+</div>
+</li>
+<li>构造函数<br />
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">const</span><span style="color: #000000;"> FittedBox({
+Key key,
+</span><span style="color: #0000ff;">this</span><span style="color: #000000;">.fit: BoxFit.contain,
+</span><span style="color: #0000ff;">this</span><span style="color: #000000;">.alignment: Alignment.center,
+Widget child,
+})</span></pre>
+</div>
+</li>
+<li>参数的含义<br />
+<p><strong>fit</strong>：缩放的方式，默认的属性是<code>BoxFit.contain</code>，child在FittedBox范围内，尽可能的大，但是不超出其尺寸。这里注意一点，contain是保持着child宽高比的大前提下，尽可能的填满，一般情况下，宽度或者高度达到最大值时，就会停止缩放。</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626111222523-1540922247.png" alt="" /></p>
+<p><strong>alignment</strong>：对齐方式，默认的属性是<code>Alignment.center</code>，居中显示child。</p>
+
+
+
+</li>
+<li>使用场景<br />FittedBox在目前的项目中还未用到过。对于需要缩放调整位置处理的，一般都是图片。笔者一般都是使用Container中的decoration属性去实现相应的效果。对于其他控件需要缩放以及调整位置的，目前还没有遇到使用场景，大家只需要知道有这么一个控件，可以实现这个功能即可。</li>
+
+
+
+
+</ul>
+
+
+
+
+</li>
+<li><strong>Stack</strong><br />
+<ul>
+<ul>
+<li>介绍：<br />Stack可以类比web中的absolute，绝对布局。绝对布局一般在移动端开发中用的较少，但是在某些场景下，还是有其作用。当然，能用Stack绝对布局完成的，用其他控件组合也都能实现。<br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626105456974-1460817305.png" alt="" /></li>
+
+
+
+布局行为</ul>
+
+
+
+</ul>
+<p>Stack的布局行为，根据child是<strong>positioned</strong>还是non-<strong>positioned</strong>来区分。</p>
+<ul>
+<ul>
+<ul>
+<li>对于positioned的子节点，它们的位置会根据所设置的top、bottom、right以及left属性来确定，这几个值都是相对于Stack的左上角；</li>
+<li>对于non-positioned的子节点，它们会根据Stack的aligment来设置位置。</li>
+
+
+
+</ul>
+
+
+
+</ul>
+
+
+
+</ul>
+<p>对于绘制child的顺序，则是第一个child被绘制在最底端，后面的依次在前一个child的上面，类似于web中的z-index。如果想调整显示的顺序，则可以通过摆放child的顺序来进行。</p>
+<ul>
+<ul>
+<li>继承关系<br />
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; MultiChildRenderObjectWidget &gt; Stack</pre>
+</div>
+</li>
+<li>构造函数<br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Stack({
+  Key key,
+  </span><span style="color: #0000ff;">this</span>.alignment =<span style="color: #000000;"> AlignmentDirectional.topStart,
+  </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.textDirection,
+  </span><span style="color: #0000ff;">this</span>.fit =<span style="color: #000000;"> StackFit.loose,
+  </span><span style="color: #0000ff;">this</span>.overflow =<span style="color: #000000;"> Overflow.clip,
+  List</span>&lt;Widget&gt; children = <span style="color: #0000ff;">const</span> &lt;Widget&gt;<span style="color: #000000;">[],
+})</span></pre>
+</div>
+</li>
+参数的含义</ul>
+</ul>
+<p>alignment：对齐方式，默认是左上角（topStart）。</p>
+<p>textDirection：文本的方向，绝大部分不需要处理。</p>
+<p>fit：定义如何设置non-positioned节点尺寸，默认为loose。</p>
+<p>其中StackFit有如下几种：</p>
+<ul>
+<ul>
+<ul>
+<li>loose：子节点宽松的取值，可以从min到max的尺寸；</li>
+<li>expand：子节点尽可能的占用空间，取max尺寸；</li>
+<li>passthrough：不改变子节点的约束条件。</li>
+</ul>
+</ul>
+</ul>
+<p>overflow：超过的部分是否裁剪掉（clipped）。</p>
+</li>
+<li><strong>IndexedStack</strong><br />
+<ul>
+<li><strong>介绍</strong>：<br />IndexedStack继承自Stack，它的作用是显示第index个child，其他child都是不可见的。所以IndexedStack的尺寸永远是跟最大的子节点尺寸一致。</li>
+<li><strong>构造函数</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">  IndexedStack({
+    Key key,
+    AlignmentGeometry alignment </span>=<span style="color: #000000;"> AlignmentDirectional.topStart,
+    TextDirection textDirection,
+    StackFit sizing </span>=<span style="color: #000000;"> StackFit.loose,
+    </span><span style="color: #0000ff;">this</span>.index = <span style="color: #800080;">0</span><span style="color: #000000;">,
+    List</span>&lt;Widget&gt; children = <span style="color: #0000ff;">const</span> &lt;Widget&gt;<span style="color: #000000;">[],
+  }) : super(key: key, alignment: alignment, textDirection: textDirection, fit: sizing, children: children);</span></pre>
+</div>
+</li>
+<li>参数的含义<br /><br /></li>
+
+
+
+
+</ul>
+
+
+
+
+</li>
+<li><strong>OverflowBox</strong><br />
+<ul>
+<li>介绍：<br />OverflowBox这个控件，允许child超出parent的范围显示，当然不用这个控件，也有很多种方式实现类似的效果。</li>
+<li>布局行为<br />当OverflowBox的最大尺寸大于child的时候，child可以完整显示，当其小于child的时候，则以最大尺寸为基准，当然，这个尺寸都是可以突破父节点的。最后加上对齐方式，完成布局。</li>
+<li>继承关系<br />
+<div class="cnblogs_code">
+<pre>Object &gt; Diagnosticable &gt; DiagnosticableTree &gt; Widget &gt; RenderObjectWidget &gt; SingleChildRenderObjectWidget &gt; OverflowBox</pre>
+</div>
+</li>
+<li>构造函数<br />
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">const</span><span style="color: #000000;"> OverflowBox({
+    Key key,
+    </span><span style="color: #0000ff;">this</span>.alignment =<span style="color: #000000;"> Alignment.center,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.minWidth,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.maxWidth,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.minHeight,
+    </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.maxHeight,
+    Widget child,
+  })</span></pre>
+</div>
+</li>
+<li>参数的含义<br />
+<p>alignment：对齐方式。</p>
+<p>minWidth：允许child的最小宽度。如果child宽度小于这个值，则按照最小宽度进行显示。</p>
+<p>maxWidth：允许child的最大宽度。如果child宽度大于这个值，则按照最大宽度进行展示。</p>
+<p>minHeight：允许child的最小高度。如果child高度小于这个值，则按照最小高度进行显示。</p>
+<p>maxHeight：允许child的最大高度。如果child高度大于这个值，则按照最大高度进行展示。</p>
+<p>其中，最小以及最大宽高度，如果为null的时候，就取父节点的constraint代替。</p>
+
+
+
+</li>
+<li>使用场景<br />
+<div class="cnblogs_code">
+<pre>有时候设计图上出现的角标，会超出整个模块，可以使用OverflowBox控件。但我们应该知道，不使用这种控件，也可以完成布局，在最外面包一层，也能达到一样的效果。具体实施起来哪个比较方便，同学们自行取舍。</pre>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+<h3>三，常用示例</h3>
+<ul>
+<li><strong>Container</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Container 组件
+ * 
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyContainer extends StatelessWidget  {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Center(
+      child:</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+        child: </span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">Hellow，Flutter&mdash;&mdash;Container</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">定位</span>
+        padding: <span style="color: #0000ff;">const</span> EdgeInsets.all(<span style="color: #800080;">8.0</span><span style="color: #000000;">),
+        alignment: Alignment.center,
+        transform: </span><span style="color: #0000ff;">new</span> Matrix4.rotationZ(<span style="color: #800080;">0.3</span><span style="color: #000000;">),
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">绘制</span>
+        decoration: <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxDecoration(
+          </span><span style="color: #008000;">//</span><span style="color: #008000;">边框</span>
+          border: <span style="color: #0000ff;">new</span><span style="color: #000000;"> Border.all(
+            color: Colors.red,
+            width: </span><span style="color: #800080;">5.0</span><span style="color: #000000;">
+          ),<br />          //背景颜色
+          color: Colors.grey,<br />          //圆角
+          borderRadius: </span><span style="color: #0000ff;">new</span> BorderRadius.all(<span style="color: #0000ff;">new</span> Radius.circular(<span style="color: #800080;">20.0</span><span style="color: #000000;">)),
+          image: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> DecorationImage(
+            image: </span><span style="color: #0000ff;">new</span> NetworkImage(<span style="color: #800000;">'</span><span style="color: #800000;">http://h.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0d023672312ac65c67506e77cec29e27/9f2f070828381f30dea167bbad014c086e06f06c.jpg</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+            centerSlice: </span><span style="color: #0000ff;">new</span> Rect.fromLTRB(<span style="color: #800080;">270.0</span>, <span style="color: #800080;">280.0</span>, <span style="color: #800080;">1360.0</span>, <span style="color: #800080;">730.0</span><span style="color: #000000;">),
+          ),
+        ),
+        </span><span style="color: #008000;">//</span><span style="color: #008000;">尺寸</span>
+        width: <span style="color: #800080;">200</span><span style="color: #000000;">,
+        height: </span><span style="color: #800080;">200</span><span style="color: #000000;">,
+      ) ,
+    ) ;
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626115218443-119968142.png" alt="" /><br /><strong>源码解析</strong>：</p>
+<div class="cnblogs_code">
+<pre>decoration = decoration ?? (color != <span style="color: #0000ff;">null</span> ? <span style="color: #0000ff;">new</span> BoxDecoration(color: color) : <span style="color: #0000ff;">null</span>),</pre>
+</div>
+<p>可以看出，对于颜色的设置，最后都是转换为decoration来进行绘制的。如果同时包含decoration和color两种属性，则会报错。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">@override
+Widget build(BuildContext context) {
+Widget current </span>=<span style="color: #000000;"> child;
+
+</span><span style="color: #0000ff;">if</span> (child == <span style="color: #0000ff;">null</span> &amp;&amp; (constraints == <span style="color: #0000ff;">null</span> || !<span style="color: #000000;">constraints.isTight)) {
+  current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> LimitedBox(
+  maxWidth: </span><span style="color: #800080;">0.0</span><span style="color: #000000;">,
+  maxHeight: </span><span style="color: #800080;">0.0</span><span style="color: #000000;">,
+  child: </span><span style="color: #0000ff;">new</span> ConstrainedBox(constraints: <span style="color: #0000ff;">const</span><span style="color: #000000;"> BoxConstraints.expand())
+ );
+}
+
+</span><span style="color: #0000ff;">if</span> (alignment != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+ current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Align(alignment: alignment, child: current);
+
+final EdgeInsetsGeometry effectivePadding </span>=<span style="color: #000000;"> _paddingIncludingDecoration;
+</span><span style="color: #0000ff;">if</span> (effectivePadding != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+ current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Padding(padding: effectivePadding, child: current);
+
+</span><span style="color: #0000ff;">if</span> (decoration != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+ current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> DecoratedBox(decoration: decoration, child: current);
+
+</span><span style="color: #0000ff;">if</span> (foregroundDecoration != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+   current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> DecoratedBox(
+   decoration: foregroundDecoration,
+   position: DecorationPosition.foreground,
+   child: current
+  );
+}
+
+</span><span style="color: #0000ff;">if</span> (constraints != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+  current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> ConstrainedBox(constraints: constraints, child: current);
+
+</span><span style="color: #0000ff;">if</span> (margin != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+  current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Padding(padding: margin, child: current);
+
+</span><span style="color: #0000ff;">if</span> (transform != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+  current </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Transform(transform: transform, child: current);
+
+</span><span style="color: #0000ff;"> return</span><span style="color: #000000;"> current;
+}</span></pre>
+</div>
+<p>Container的build函数不长，绘制也是一个线性的判断的过程，一层一层的包裹着widget，去实现不同的样式。</p>
+<p>最里层的是child，如果为空或者其他约束条件，则最里层包含的为一个LimitedBox，然后依次是Align、Padding、DecoratedBox、前景DecoratedBox、ConstrainedBox、Padding（实现margin效果）、Transform。</p>
+<p>Container的源码本身并不复杂，复杂的是它的各种布局表现。我们谨记住一点，如果内部不设置约束，则按照父节点尽可能的扩大，如果内部有约束，则按照内部来。</p>
+</li>
+<li><strong>Center</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Center
+ </span><span style="color: #008000;">*/</span>
+
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyCenter extends StatelessWidget {
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">不用center组件</span>
+  Widget text = <span style="color: #0000ff;">new</span><span style="color: #000000;"> Text(
+      </span><span style="color: #800000;">'</span><span style="color: #800000;">不包含center</span><span style="color: #800000;">'</span><span style="color: #000000;">
+  );
+  </span><span style="color: #008000;">//</span><span style="color: #008000;">包含center组件</span>
+  Widget center = <span style="color: #0000ff;">new</span><span style="color: #000000;"> Center(
+    child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Text(
+      </span><span style="color: #800000;">'</span><span style="color: #800000;">包含center组件</span><span style="color: #800000;">'</span><span style="color: #000000;">
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span><span style="color: #000000;"> text;
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img style="display: block; margin-left: auto; margin-right: auto;" src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626130108251-682936699.png" alt="" /></p>
+<br /><strong>源码解析</strong>：<br />
+<p>Center继承自Align，只不过是将alignment设置为Alignment.center，其他属性例如widthFactor、heightFactor，布局行为，都与Align完全一样。Center源码如下，没有设置alignment属性，是因为Align默认的对齐方式就是居中。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">class</span><span style="color: #000000;"> Center extends Align {
+</span><span style="color: #808080;">///</span><span style="color: #008000;"> Creates a widget that centers its child.</span>
+<span style="color: #0000ff;">const</span> Center({ Key key, <span style="color: #0000ff;">double</span> widthFactor, <span style="color: #0000ff;">double</span><span style="color: #000000;"> heightFactor, Widget child })
+: super(key: key, widthFactor: widthFactor, heightFactor: heightFactor, child: child);
+}</span></pre>
+</div>
+</li>
+<li><strong>Padding</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Padding
+ </span><span style="color: #008000;">*/</span>
+
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyPadding extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Padding(
+      padding: </span><span style="color: #0000ff;">new</span> EdgeInsets.all(<span style="color: #800080;">8.0</span><span style="color: #000000;">),
+      child: </span><span style="color: #0000ff;">const</span><span style="color: #000000;"> Card(
+        child: </span><span style="color: #0000ff;">const</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">Flutter布局组件--Padding</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+      ),
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong><br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626130815535-1811966933.png" alt="" /></p>
+<strong>源码解析：</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">@override
+ RenderPadding createRenderObject(BuildContext context) {
+</span><span style="color: #0000ff;"> return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> RenderPadding(
+   padding: padding,
+   textDirection: Directionality.of(context),
+ );
+}</span></pre>
+</div>
+<p>Padding的创建函数，实际上是由RenderPadding来进行的。</p>
+<p>关于RenderPadding的实际布局表现，当child为null的时候：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (child == <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+ size </span>= constraints.constrain(<span style="color: #0000ff;">new</span><span style="color: #000000;"> Size(
+ _resolvedPadding.left </span>+<span style="color: #000000;"> _resolvedPadding.right,
+ _resolvedPadding.top </span>+<span style="color: #000000;"> _resolvedPadding.bottom
+));
+</span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>返回一个宽为_resolvedPadding.left+_resolvedPadding.right，高为_resolvedPadding.top+_resolvedPadding.bottom的区域。</p>
+<p>当child不为null的时候，经历了三个过程，即调整child尺寸、调整child位置以及调整Padding尺寸，最终达到实际的布局效果。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 调整child尺寸</span>
+final BoxConstraints innerConstraints =<span style="color: #000000;"> constraints.deflate(_resolvedPadding);
+child.layout(innerConstraints, parentUsesSize: </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 调整child位置</span>
+final BoxParentData childParentData =<span style="color: #000000;"> child.parentData;
+childParentData.offset </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Offset(_resolvedPadding.left, _resolvedPadding.top);
+
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 调整Padding尺寸</span>
+size = constraints.constrain(<span style="color: #0000ff;">new</span><span style="color: #000000;"> Size(
+_resolvedPadding.left </span>+ child.size.width +<span style="color: #000000;"> _resolvedPadding.right,
+_resolvedPadding.top </span>+ child.size.height +<span style="color: #000000;"> _resolvedPadding.bottom
+));</span></pre>
+</div>
+<p>到此处，上面介绍的padding布局行为就解释的通了。</p>
+</li>
+<li><strong>Align</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Align
+ * 设置一个宽高为child两倍区域的Align，其child处在正中间。
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyAlign extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Align(
+      alignment: Alignment.center,
+      widthFactor: </span><span style="color: #800080;">2.0</span><span style="color: #000000;">,
+      heightFactor: </span><span style="color: #800080;">2.0</span><span style="color: #000000;">,
+      child: </span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">"</span><span style="color: #800000;">flutter布局组件之Align</span><span style="color: #800000;">"</span><span style="color: #000000;">),
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626131752543-883651280.png" alt="" /><br /><br /><strong>源码解析</strong>:</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">@override
+RenderPositionedBox createRenderObject(BuildContext context) {
+</span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> RenderPositionedBox(
+alignment: alignment,
+widthFactor: widthFactor,
+heightFactor: heightFactor,
+textDirection: Directionality.of(context),
+);
+}</span></pre>
+</div>
+<p>Align的实际构造调用的是RenderPositionedBox。</p>
+<p>RenderPositionedBox的布局表现如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">//</span><span style="color: #008000;"> 根据_widthFactor、_heightFactor以及限制因素来确定宽高</span>
+final <span style="color: #0000ff;">bool</span> shrinkWrapWidth = _widthFactor != <span style="color: #0000ff;">null</span> || constraints.maxWidth == <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity;
+final </span><span style="color: #0000ff;">bool</span> shrinkWrapHeight = _heightFactor != <span style="color: #0000ff;">null</span> || constraints.maxHeight == <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity;
+
+</span><span style="color: #0000ff;">if</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 如果child不为null，则根据规则设置Align的宽高，如果需要缩放，则根据_widthFactor是否为null来进行缩放，如果不需要，则尽量扩展。</span>
+child.layout(constraints.loosen(), parentUsesSize: <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+size </span>= constraints.constrain(<span style="color: #0000ff;">new</span> Size(shrinkWrapWidth ? child.size.width * (_widthFactor ?? <span style="color: #800080;">1.0</span>) : <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity,
+shrinkWrapHeight </span>? child.size.height * (_heightFactor ?? <span style="color: #800080;">1.0</span>) : <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity));
+alignChild();
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #008000;">//</span><span style="color: #008000;"> 如果child为null，如果需要缩放，则变为0，否则就尽量扩展</span>
+size = constraints.constrain(<span style="color: #0000ff;">new</span> Size(shrinkWrapWidth ? <span style="color: #800080;">0.0</span> : <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity,
+shrinkWrapHeight </span>? <span style="color: #800080;">0.0</span> : <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity));
+}</span></pre>
+</div>
+</li>
+<li><strong>Colum</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Column
+ * 使用Expanded控件，将一行的宽度分成四个等分，第一、三个child占1/4的区域，第二个child占1/2区域，由flex属性控制。
+ </span><span style="color: #008000;">*/</span>
+
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyColumn extends StatelessWidget  {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Column(
+      children: </span>&lt;Widget&gt;<span style="color: #000000;">[
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.red,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ),
+          flex: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+        ),
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.yellow,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ),
+          flex: </span><span style="color: #800080;">2</span><span style="color: #000000;">,
+        ),
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.blue,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ),
+          flex: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+        )
+      ],
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626132441615-1421615311.png" alt="" /></p>
+<strong>源码解析</strong>：<br />&nbsp; &nbsp;和Row类似，参考Row</li>
+<li><strong>Row</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Row
+ *  使用Expanded控件，将水平方向一行的宽度分成四个等分，第一、三个child占1/4的区域，第二个child占1/2区域，由flex属性控制。
+ </span><span style="color: #008000;">*/</span>
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Row(
+      children: </span>&lt;Widget&gt;<span style="color: #000000;">[
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          flex: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.red,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ),
+        ),
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          flex: </span><span style="color: #800080;">2</span><span style="color: #000000;">,
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.yellow,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ) ,
+        ),
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+          flex: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            color: Colors.blue,
+            padding: EdgeInsets.all(</span><span style="color: #800080;">5.0</span><span style="color: #000000;">),
+          ),
+        )
+      ],
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626133123902-1355049389.png" alt="" /><br /><br /><strong>原理图</strong>：</p>
+<p>Row以及Column的源代码就一个构造函数，具体的实现全部在它们的父类Flex中。</p>
+<p>关于Flex的构造函数</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Flex({
+Key key,
+@required </span><span style="color: #0000ff;">this</span><span style="color: #000000;">.direction,
+</span><span style="color: #0000ff;">this</span>.mainAxisAlignment =<span style="color: #000000;"> MainAxisAlignment.start,
+</span><span style="color: #0000ff;">this</span>.mainAxisSize =<span style="color: #000000;"> MainAxisSize.max,
+</span><span style="color: #0000ff;">this</span>.crossAxisAlignment =<span style="color: #000000;"> CrossAxisAlignment.center,
+</span><span style="color: #0000ff;">this</span><span style="color: #000000;">.textDirection,
+</span><span style="color: #0000ff;">this</span>.verticalDirection =<span style="color: #000000;"> VerticalDirection.down,
+</span><span style="color: #0000ff;">this</span><span style="color: #000000;">.textBaseline,
+List</span>&lt;Widget&gt; children = <span style="color: #0000ff;">const</span> &lt;Widget&gt;<span style="color: #000000;">[],
+})</span></pre>
+</div>
+<p>可以看出，Flex的构造函数就比Row和Column的多了一个参数。Row跟Column的区别，正是这个direction参数的不同。当为Axis.horizontal的时候，则是Row，当为Axis.vertical的时候，则是Column。</p>
+<p>我们来看下Flex的布局函数，由于布局函数比较多，因此分段来讲解：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">while</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+ final FlexParentData childParentData </span>=<span style="color: #000000;"> child.parentData;
+ totalChildren</span>++<span style="color: #000000;">;
+ final </span><span style="color: #0000ff;">int</span> flex =<span style="color: #000000;"> _getFlex(child);
+</span><span style="color: #0000ff;">if</span> (flex &gt; <span style="color: #800080;">0</span><span style="color: #000000;">) {
+  totalFlex </span>+=<span style="color: #000000;"> childParentData.flex;
+  lastFlexChild </span>=<span style="color: #000000;"> child;
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+ BoxConstraints innerConstraints;
+</span><span style="color: #0000ff;"> if</span> (crossAxisAlignment ==<span style="color: #000000;"> CrossAxisAlignment.stretch) {
+</span><span style="color: #0000ff;">  switch</span><span style="color: #000000;"> (_direction) {
+</span><span style="color: #0000ff;">   case</span><span style="color: #000000;"> Axis.horizontal:
+    innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(minHeight: constraints.maxHeight,
+    maxHeight: constraints.maxHeight);
+</span><span style="color: #0000ff;">    break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">   case</span><span style="color: #000000;"> Axis.vertical:
+    innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(minWidth: constraints.maxWidth,
+    maxWidth: constraints.maxWidth);
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+ }
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #0000ff;"> switch</span><span style="color: #000000;"> (_direction) {
+</span><span style="color: #0000ff;">  case</span><span style="color: #000000;"> Axis.horizontal:
+    innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(maxHeight: constraints.maxHeight);
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">  case</span><span style="color: #000000;"> Axis.vertical:
+  innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(maxWidth: constraints.maxWidth);
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+ }
+}
+child.layout(innerConstraints, parentUsesSize: </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+allocatedSize </span>+=<span style="color: #000000;"> _getMainSize(child);
+crossSize </span>=<span style="color: #000000;"> math.max(crossSize, _getCrossSize(child));
+}
+child </span>=<span style="color: #000000;"> childParentData.nextSibling;
+}</span></pre>
+</div>
+<p>上面这段代码，我把中间的一些assert以及错误信息之类的代码剔除了，不影响实际的理解。</p>
+<p>在布局的开始，首先会遍历一遍child，遍历的作用有两点：</p>
+<p>对于存在flex值的child，计算出flex的和，找到最后一个包含flex值的child。找到这个child，是因为主轴对齐方式，可能会对它的位置做调整，需要找出来；<br />对于不包含flex的child，根据交叉轴方向的设置，对child进行调整。</p>
+<div class="cnblogs_code">
+<pre>final <span style="color: #0000ff;">double</span> freeSpace = math.max(<span style="color: #800080;">0.0</span>, (canFlex ? maxMainSize : <span style="color: #800080;">0.0</span>) -<span style="color: #000000;"> allocatedSize);
+</span><span style="color: #0000ff;">if</span> (totalFlex &gt; <span style="color: #800080;">0</span> || crossAxisAlignment ==<span style="color: #000000;"> CrossAxisAlignment.baseline) {
+ final </span><span style="color: #0000ff;">double</span> spacePerFlex = canFlex &amp;&amp; totalFlex &gt; <span style="color: #800080;">0</span> ? (freeSpace / totalFlex) : <span style="color: #0000ff;">double</span><span style="color: #000000;">.nan;
+ child </span>=<span style="color: #000000;"> firstChild;
+</span><span style="color: #0000ff;">while</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+ final </span><span style="color: #0000ff;">int</span> flex =<span style="color: #000000;"> _getFlex(child);
+</span><span style="color: #0000ff;">if</span> (flex &gt; <span style="color: #800080;">0</span><span style="color: #000000;">) {
+ final </span><span style="color: #0000ff;">double</span> maxChildExtent = canFlex ? (child == lastFlexChild ? (freeSpace - allocatedFlexSpace) : spacePerFlex * flex) : <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity;
+</span><span style="color: #0000ff;">double</span><span style="color: #000000;"> minChildExtent;
+</span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_getFit(child)) {
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> FlexFit.tight:
+  assert(maxChildExtent </span>&lt; <span style="color: #0000ff;">double</span><span style="color: #000000;">.infinity);
+  minChildExtent </span>=<span style="color: #000000;"> maxChildExtent;
+</span><span style="color: #0000ff;">  break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> FlexFit.loose:
+  minChildExtent </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">  break</span><span style="color: #000000;">;
+}
+BoxConstraints innerConstraints;
+</span><span style="color: #0000ff;">if</span> (crossAxisAlignment ==<span style="color: #000000;"> CrossAxisAlignment.stretch) {
+</span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_direction) {
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> Axis.horizontal:
+  innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(minWidth: minChildExtent,
+  maxWidth: maxChildExtent,
+  minHeight: constraints.maxHeight,
+  maxHeight: constraints.maxHeight);
+</span><span style="color: #0000ff;"> break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> Axis.vertical:
+  innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(minWidth: constraints.maxWidth,
+  maxWidth: constraints.maxWidth,
+  minHeight: minChildExtent,
+  maxHeight: maxChildExtent);
+</span><span style="color: #0000ff;">  break</span><span style="color: #000000;">;
+ }
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_direction) {
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> Axis.horizontal:
+  innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(minWidth: minChildExtent,
+  maxWidth: maxChildExtent,
+  maxHeight: constraints.maxHeight);
+</span><span style="color: #0000ff;"> break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> Axis.vertical:
+ innerConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints(maxWidth: constraints.maxWidth,
+ minHeight: minChildExtent,
+ maxHeight: maxChildExtent);
+</span><span style="color: #0000ff;"> break</span><span style="color: #000000;">;
+ }
+}
+child.layout(innerConstraints, parentUsesSize: </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+final </span><span style="color: #0000ff;">double</span> childSize =<span style="color: #000000;"> _getMainSize(child);
+allocatedSize </span>+=<span style="color: #000000;"> childSize;
+allocatedFlexSpace </span>+=<span style="color: #000000;"> maxChildExtent;
+crossSize </span>=<span style="color: #000000;"> math.max(crossSize, _getCrossSize(child));
+}
+</span><span style="color: #0000ff;">if</span> (crossAxisAlignment ==<span style="color: #000000;"> CrossAxisAlignment.baseline) {
+final </span><span style="color: #0000ff;">double</span> distance = child.getDistanceToBaseline(textBaseline, onlyReal: <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">if</span> (distance != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+maxBaselineDistance </span>=<span style="color: #000000;"> math.max(maxBaselineDistance, distance);
+}
+final FlexParentData childParentData </span>=<span style="color: #000000;"> child.parentData;
+child </span>=<span style="color: #000000;"> childParentData.nextSibling;
+}
+}</span></pre>
+</div>
+<p>上面的代码段所做的事情也有两点：</p>
+<p>（1）为包含flex的child分配剩余的空间<br />（2）对于每份flex所对应的空间大小，它的计算方式如下：</p>
+<p>final double freeSpace = math.max(0.0, (canFlex ? maxMainSize : 0.0) - allocatedSize);<br />final double spacePerFlex = canFlex &amp;&amp; totalFlex &gt; 0 ? (freeSpace / totalFlex) : double.nan;<br />其中，allocatedSize是不包含flex所占用的空间。当每一份flex所占用的空间计算出来后，则根据交叉轴的设置，对包含flex的child进行调整。</p>
+<p><strong>计算出baseline值</strong><br />如果交叉轴的对齐方式为baseline，则计算出最大的baseline值，将其作为整体的baseline值。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_mainAxisAlignment) {
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.start:
+leadingSpace </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+betweenSpace </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.end:
+leadingSpace </span>=<span style="color: #000000;"> remainingSpace;
+betweenSpace </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.center:
+leadingSpace </span>= remainingSpace / <span style="color: #800080;">2.0</span><span style="color: #000000;">;
+betweenSpace </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.spaceBetween:
+leadingSpace </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+betweenSpace </span>= totalChildren &gt; <span style="color: #800080;">1</span> ? remainingSpace / (totalChildren - <span style="color: #800080;">1</span>) : <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.spaceAround:
+betweenSpace </span>= totalChildren &gt; <span style="color: #800080;">0</span> ? remainingSpace / totalChildren : <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+leadingSpace </span>= betweenSpace / <span style="color: #800080;">2.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> MainAxisAlignment.spaceEvenly:
+betweenSpace </span>= totalChildren &gt; <span style="color: #800080;">0</span> ? remainingSpace / (totalChildren + <span style="color: #800080;">1</span>) : <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+leadingSpace </span>=<span style="color: #000000;"> betweenSpace;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>然后，就是将child在主轴方向上按照设置的对齐方式，进行位置调整。上面代码就是计算前后空白区域值的过程，可以看出spaceBetween、spaceAround以及spaceEvenly的差别。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">double</span> childMainPosition = flipMainAxis ? actualSize -<span style="color: #000000;"> leadingSpace : leadingSpace;
+child </span>=<span style="color: #000000;"> firstChild;
+</span><span style="color: #0000ff;">while</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+final FlexParentData childParentData </span>=<span style="color: #000000;"> child.parentData;
+</span><span style="color: #0000ff;">double</span><span style="color: #000000;"> childCrossPosition;
+</span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_crossAxisAlignment) {
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> CrossAxisAlignment.start:
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> CrossAxisAlignment.end:
+childCrossPosition </span>=<span style="color: #000000;"> _startIsTopLeft(flipAxis(direction), textDirection, verticalDirection)
+</span>== (_crossAxisAlignment ==<span style="color: #000000;"> CrossAxisAlignment.start)
+</span>? <span style="color: #800080;">0.0</span><span style="color: #000000;">
+: crossSize </span>-<span style="color: #000000;"> _getCrossSize(child);
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> CrossAxisAlignment.center:
+childCrossPosition </span>= crossSize / <span style="color: #800080;">2.0</span> - _getCrossSize(child) / <span style="color: #800080;">2.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> CrossAxisAlignment.stretch:
+childCrossPosition </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> CrossAxisAlignment.baseline:
+childCrossPosition </span>= <span style="color: #800080;">0.0</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">if</span> (_direction ==<span style="color: #000000;"> Axis.horizontal) {
+assert(textBaseline </span>!= <span style="color: #0000ff;">null</span><span style="color: #000000;">);
+final </span><span style="color: #0000ff;">double</span> distance = child.getDistanceToBaseline(textBaseline, onlyReal: <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+</span><span style="color: #0000ff;">if</span> (distance != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+childCrossPosition </span>= maxBaselineDistance -<span style="color: #000000;"> distance;
+}
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+}
+</span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (flipMainAxis)
+childMainPosition </span>-=<span style="color: #000000;"> _getMainSize(child);
+</span><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (_direction) {
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> Axis.horizontal:
+childParentData.offset </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Offset(childMainPosition, childCrossPosition);
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;">case</span><span style="color: #000000;"> Axis.vertical:
+childParentData.offset </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Offset(childCrossPosition, childMainPosition);
+</span><span style="color: #0000ff;">break</span><span style="color: #000000;">;
+}
+</span><span style="color: #0000ff;">if</span><span style="color: #000000;"> (flipMainAxis) {
+childMainPosition </span>-=<span style="color: #000000;"> betweenSpace;
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+childMainPosition </span>+= _getMainSize(child) +<span style="color: #000000;"> betweenSpace;
+}
+child </span>=<span style="color: #000000;"> childParentData.nextSibling;
+}</span></pre>
+</div>
+<p>最后，则是根据交叉轴的对齐方式设置，对child进行位置调整，到此，布局结束。</p>
+<p>我们可以顺一下整体的流程：</p>
+<p>计算出flex的总和，并找到最后一个设置了flex的child；<br />对不包含flex的child，根据交叉轴对齐方式，对齐进行调整，并计算出主轴方向上所占区域大小；<br />计算出每一份flex所占用的空间，并根据交叉轴对齐方式，对包含flex的child进行调整；<br />如果交叉轴设置为baseline对齐，则计算出整体的baseline值；<br />按照主轴对齐方式，对child进行调整；<br />最后，根据交叉轴对齐方式，对所有child位置进行调整，完成布局。</p>
+</li>
+<li>Expanded<br />
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">class</span><span style="color: #000000;"> MyHomePage extends StatelessWidget {
+  ....
+  body:</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> RowWidget(),
+  ...
+}
+</span><span style="color: #0000ff;">class</span><span style="color: #000000;"> RowWidget extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> Row(
+        children: </span>&lt;Widget&gt;<span style="color: #000000;">[
+          </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> RaisedButton(
+              onPressed: (){
+
+              },
+              color:Colors.green,
+              child:</span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">绿色按钮1</span><span style="color: #800000;">'</span><span style="color: #000000;">)
+          ),
+          </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Expanded(
+            child:</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> RaisedButton(
+              onPressed: (){
+
+              },
+              color:Colors.yellow,
+              child:</span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">黄色按钮2</span><span style="color: #800000;">'</span><span style="color: #000000;">)
+            ),
+          ),
+          </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> RaisedButton(
+              onPressed:(){
+
+              },
+              color:Colors.red,
+              child:</span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">黑色按钮3</span><span style="color: #800000;">'</span><span style="color: #000000;">)),
+      ],
+    );
+  }
+}</span></pre>
+</div>
+<p>效果图：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626142322307-1795168191.png" alt="" /></p>
+</li>
+<li>FittedBox<br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Fitted Box
+ * 加入Container是为了加颜色显示两个区域，读者可以试着修改fit以及alignment查看其不同的效果。
+ * 类似于其它移动端的imageView的contentView属性
+ </span><span style="color: #008000;">*/</span>
+
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyFittedBox extends StatelessWidget  {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+      width: </span><span style="color: #800080;">300.0</span><span style="color: #000000;">,
+      height: </span><span style="color: #800080;">300.0</span><span style="color: #000000;">,
+      color: Colors.blue,
+      child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> FittedBox(
+        fit: BoxFit.contain,
+        alignment: Alignment.topLeft,
+        child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+          color: Colors.red,
+          child: </span><span style="color: #0000ff;">new</span> Text(<span style="color: #800000;">'</span><span style="color: #800000;">FittedBox</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+        ),
+      ),
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626134301815-1877882176.png" alt="" /><br /><strong>源码解析</strong>：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">@override
+RenderFittedBox createRenderObject(BuildContext context) {
+</span><span style="color: #0000ff;"> return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> RenderFittedBox(
+  fit: fit,
+  alignment: alignment,
+  textDirection: Directionality.of(context),
+ );
+}</span></pre>
+</div>
+<p>FittedBox具体实现是由RenderFittedBox进行的。不知道读者有没有发现，目前的一些基础控件，继承自RenderObjectWidget的，widget本身都只是存储了一些配置信息，真正的绘制渲染，则是由内部的createRenderObject所调用的RenderObject去实现的。</p>
+<p><strong>RenderFittedBox</strong>具体的布局代码如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+  child.layout(</span><span style="color: #0000ff;">const</span> BoxConstraints(), parentUsesSize: <span style="color: #0000ff;">true</span><span style="color: #000000;">);
+</span><span style="color: #008000;">  //</span><span style="color: #008000;"> 如果child不为null，则按照child的尺寸比率缩放child的尺寸</span>
+  size =<span style="color: #000000;"> constraints.constrainSizeAndAttemptToPreserveAspectRatio(child.size);
+  _clearPaintData();
+ } </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+</span><span style="color: #008000;">  //</span><span style="color: #008000;"> 如果child为null，则按照最小尺寸进行布局</span>
+  size =<span style="color: #000000;"> constraints.smallest;
+}</span></pre>
+</div>
+</li>
+<li><strong>Stack</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #008000;">/*</span><span style="color: #008000;">*
+ * Stack
+ </span><span style="color: #008000;">*/</span>
+
+<span style="color: #0000ff;">class</span><span style="color: #000000;"> MyStack extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #008000;">//</span><span style="color: #008000;"> TODO: implement build</span>
+    <span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Stack(
+      alignment: </span><span style="color: #0000ff;">const</span> Alignment(<span style="color: #800080;">0.6</span>, <span style="color: #800080;">0.6</span><span style="color: #000000;">),
+      children: </span>&lt;Widget&gt;<span style="color: #000000;">[
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> CircleAvatar(
+          backgroundImage: AssetImage(</span><span style="color: #800000;">'</span><span style="color: #800000;">a</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+          radius: </span><span style="color: #800080;">100.0</span><span style="color: #000000;">,
+        ),
+        </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+          decoration: BoxDecoration(
+            color: Colors.black45,
+          ),
+          child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Text(
+            </span><span style="color: #800000;">'</span><span style="color: #800000;">FLutter-Statck</span><span style="color: #800000;">'</span><span style="color: #000000;">,
+            style:</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> TextStyle(
+              fontSize:</span><span style="color: #800080;">20.0</span><span style="color: #000000;">,
+              fontWeight:FontWeight.bold,
+              color:Colors.white
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626135006201-2050615678.png" alt="" /></p>
+</li>
+</ul>
+<p>　　<strong>源码解析</strong>：</p>
+<p>　　（1）Stack的布局代码有些长，在此分段进行讲解。</p>
+<p>　　 &nbsp; 如果不包含子节点，则尺寸尽可能大。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (childCount == <span style="color: #800080;">0</span><span style="color: #000000;">) {
+  size </span>=<span style="color: #000000;"> constraints.biggest;
+</span><span style="color: #0000ff;">  return</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>&nbsp; &nbsp; &nbsp; （2）根据fit属性，设置non-positioned子节点约束条件。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">switch</span><span style="color: #000000;"> (fit) {
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> StackFit.loose:
+   nonPositionedConstraints </span>=<span style="color: #000000;"> constraints.loosen();
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> StackFit.expand:
+   nonPositionedConstraints </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxConstraints.tight(constraints.biggest);
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+</span><span style="color: #0000ff;"> case</span><span style="color: #000000;"> StackFit.passthrough:
+   nonPositionedConstraints </span>=<span style="color: #000000;"> constraints;
+</span><span style="color: #0000ff;">   break</span><span style="color: #000000;">;
+}</span></pre>
+</div>
+<p>&nbsp; &nbsp;（3）对non-positioned子节点进行布局。</p>
+<div class="cnblogs_code">
+<pre>RenderBox child =<span style="color: #000000;"> firstChild;
+</span><span style="color: #0000ff;">while</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+final StackParentData childParentData </span>=<span style="color: #000000;"> child.parentData;
+</span><span style="color: #0000ff;">if</span> (!<span style="color: #000000;">childParentData.isPositioned) {
+  hasNonPositionedChildren </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+  child.layout(nonPositionedConstraints, parentUsesSize: </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+  final Size childSize </span>=<span style="color: #000000;"> child.size;
+  width </span>=<span style="color: #000000;"> math.max(width, childSize.width);
+  height </span>=<span style="color: #000000;"> math.max(height, childSize.height);
+}
+  child </span>=<span style="color: #000000;"> childParentData.nextSibling;
+}</span></pre>
+</div>
+<p>&nbsp; &nbsp;（4）.根据是否包含positioned子节点，对stack进行尺寸调整。　</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span><span style="color: #000000;"> (hasNonPositionedChildren) {
+  size </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> Size(width, height);
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+  size </span>=<span style="color: #000000;"> constraints.biggest;
+}</span></pre>
+</div>
+<p>&nbsp; &nbsp;（5）.最后对子节点位置的调整，这个调整过程中，则根据alignment、positioned节点的绝对位置等信息，对子节点进行布局。<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;第一步是根据positioned的绝对位置，计算出约束条件后进行布局。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (childParentData.left != <span style="color: #0000ff;">null</span> &amp;&amp; childParentData.right != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+   childConstraints </span>= childConstraints.tighten(width: size.width - childParentData.right -<span style="color: #000000;"> childParentData.left);
+</span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (childParentData.width != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+   childConstraints </span>=<span style="color: #000000;"> childConstraints.tighten(width: childParentData.width);
+
+</span><span style="color: #0000ff;">if</span> (childParentData.top != <span style="color: #0000ff;">null</span> &amp;&amp; childParentData.bottom != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+   childConstraints </span>= childConstraints.tighten(height: size.height - childParentData.bottom -<span style="color: #000000;"> childParentData.top);
+</span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (childParentData.height != <span style="color: #0000ff;">null</span><span style="color: #000000;">)
+   childConstraints </span>=<span style="color: #000000;"> childConstraints.tighten(height: childParentData.height);
+
+child.layout(childConstraints, parentUsesSize: </span><span style="color: #0000ff;">true</span>);</pre>
+</div>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;第二步则是位置的调整，其中坐标的计算如下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">double</span><span style="color: #000000;"> x;
+</span><span style="color: #0000ff;">if</span> (childParentData.left != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+  x </span>=<span style="color: #000000;"> childParentData.left;
+} </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (childParentData.right != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+  x </span>= size.width - childParentData.right -<span style="color: #000000;"> child.size.width;
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+  x </span>= _resolvedAlignment.alongOffset(size -<span style="color: #000000;"> child.size).dx;
+}
+
+</span><span style="color: #0000ff;">if</span> (x &lt; <span style="color: #800080;">0.0</span> || x + child.size.width &gt;<span style="color: #000000;"> size.width)
+  _hasVisualOverflow </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+
+</span><span style="color: #0000ff;">double</span><span style="color: #000000;"> y;
+</span><span style="color: #0000ff;">if</span> (childParentData.top != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+  y </span>=<span style="color: #000000;"> childParentData.top;
+} </span><span style="color: #0000ff;">else</span> <span style="color: #0000ff;">if</span> (childParentData.bottom != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+  y </span>= size.height - childParentData.bottom -<span style="color: #000000;"> child.size.height;
+} </span><span style="color: #0000ff;">else</span><span style="color: #000000;"> {
+  y </span>= _resolvedAlignment.alongOffset(size -<span style="color: #000000;"> child.size).dy;
+}
+
+</span><span style="color: #0000ff;">if</span> (y &lt; <span style="color: #800080;">0.0</span> || y + child.size.height &gt;<span style="color: #000000;"> size.height)
+ _hasVisualOverflow </span>= <span style="color: #0000ff;">true</span><span style="color: #000000;">;
+
+childParentData.offset </span>= <span style="color: #0000ff;">new</span> Offset(x, y);</pre>
+</div>
+<ul>
+<li><strong>IndexedStack</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">class</span><span style="color: #000000;"> MyIndexedStack extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    </span><span style="color: #0000ff;">return</span> <span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+      color: Colors.yellow,
+      child: IndexedStack(
+        index: </span><span style="color: #800080;">1</span><span style="color: #000000;">,
+        alignment: </span><span style="color: #0000ff;">const</span> Alignment(<span style="color: #800080;">0.6</span>, <span style="color: #800080;">0.6</span><span style="color: #000000;">),
+        children: </span>&lt;Widget&gt;<span style="color: #000000;">[
+          </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> CircleAvatar(
+            backgroundImage: AssetImage(</span><span style="color: #800000;">'</span><span style="color: #800000;">1</span><span style="color: #800000;">'</span><span style="color: #000000;">),
+            radius: </span><span style="color: #800080;">100.0</span><span style="color: #000000;">,
+          ),
+          </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Container(
+            decoration: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> BoxDecoration(
+              color: Colors.black45,
+            ),
+            child: </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> Text(
+              </span><span style="color: #800000;">'</span><span style="color: #800000;">Flutter--Demo</span><span style="color: #800000;">'</span><span style="color: #000000;">,
+              style:</span><span style="color: #0000ff;">new</span><span style="color: #000000;"> TextStyle(
+                fontSize: </span><span style="color: #800080;">20.0</span><span style="color: #000000;">,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}</span></pre>
+</div>
+<p>效果图：<br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626140349896-2135911554.png" alt="" /><br /><br />源码分析：</p>
+<p>其绘制代码很简单，因为继承自Stack，布局方面表现基本一致，不同之处在于其绘制的时候，只是将第Index个child进行了绘制。</p>
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">@override
+</span><span style="color: #0000ff;">void</span><span style="color: #000000;"> paintStack(PaintingContext context, Offset offset) {
+ </span><span style="color: #0000ff;">if</span> (firstChild == <span style="color: #0000ff;">null</span> || index == <span style="color: #0000ff;">null</span><span style="color: #000000;">) </span><span style="color: #0000ff;">return</span><span style="color: #000000;">;
+   final RenderBox child </span>=<span style="color: #000000;"> _childAtIndex();
+   final StackParentData childParentData </span>=<span style="color: #000000;"> child.parentData;
+   context.paintChild(child, childParentData.offset </span>+<span style="color: #000000;"> offset);
+}</span></pre>
+</div>
+</li>
+<li><strong>OverflowBox</strong><br />
+<div class="cnblogs_code">
+<pre><span style="color: #000000;">Container(
+  color: Colors.green,
+  width: </span><span style="color: #800080;">200.0</span><span style="color: #000000;">,
+  height: </span><span style="color: #800080;">200.0</span><span style="color: #000000;">,
+  padding: </span><span style="color: #0000ff;">const</span> EdgeInsets.all(<span style="color: #800080;">5.0</span><span style="color: #000000;">),
+  child: OverflowBox(
+    alignment: Alignment.topLeft,
+    maxWidth: </span><span style="color: #800080;">300.0</span><span style="color: #000000;">,
+    maxHeight: </span><span style="color: #800080;">500.0</span><span style="color: #000000;">,
+    child: Container(
+      color: Color(</span><span style="color: #800080;">0x33FF00FF</span><span style="color: #000000;">),
+      width: </span><span style="color: #800080;">400.0</span><span style="color: #000000;">,
+      height: </span><span style="color: #800080;">400.0</span><span style="color: #000000;">,
+    ),
+  ),
+)</span></pre>
+</div>
+<p><strong>效果图</strong>：<br /><br /><img src="https://img2018.cnblogs.com/blog/1115039/201906/1115039-20190626141528956-560546719.png" alt="" /></p>
+源码解析：
+<p>OverflowBox的源码很简单，我们先来看一下布局代码：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">if</span> (child != <span style="color: #0000ff;">null</span><span style="color: #000000;">) {
+ child.layout(_getInnerConstraints(constraints), parentUsesSize: </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+ alignChild();
+}</span></pre>
+</div>
+<p>如果child不为null，child则会按照计算出的constraints进行尺寸的调整，然后对齐。</p>
+<p>至于constraints的计算，则还是上面的逻辑，如果设置的有的话，就取这个值，如果没有的话，就拿父节点的。</p>
+</li>
+</ul>
+<p>四，参考<br />　　《<a href="https://juejin.im/post/5c5c1f21e51d457fcc5a9f9f#heading-23" target="_blank">Flutter学习之认知基础组件</a>》<br />　　《<a href="https://github.com/yang7229693/flutter-study/blob/master/post/4.%20Flutter%20%E5%B8%83%E5%B1%80%EF%BC%88%E4%B8%80%EF%BC%89-%20Container%E8%AF%A6%E8%A7%A3.md" target="_blank">Flutter布局</a>》</p>
+</div>
+    
+</body>
+</html>
+
